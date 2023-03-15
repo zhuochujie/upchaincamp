@@ -10,8 +10,8 @@ contract Bank {
     
     
     function withdraw() external {
-        payable(msg.sender).transfer(balance[msg.sender]);
         balance[msg.sender] = 0;
+        payable(msg.sender).transfer(balance[msg.sender]);
     }
 
     receive() external payable {
