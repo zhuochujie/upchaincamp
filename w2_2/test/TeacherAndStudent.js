@@ -1,6 +1,9 @@
 const { expect } = require("chai");
 describe("TeacherAndStudent", function () {
     it("setScore",async function() {
+
+        let [user1] = await ethers.getSigners();
+
         const Teacher = await hre.ethers.getContractFactory("Teacher");
         const teacher = await Teacher.deploy();
         await teacher.deployed();
@@ -21,6 +24,9 @@ describe("TeacherAndStudent", function () {
         // receipt = await teacher.setScore("0x6Ecb1e890b68DFa299DdD4856cf30a3d38867B47",150);
         // await receipt.wait();
 
-        await expect(teacher.setScore("0x6Ecb1e890b68DFa299DdD4856cf30a3d38867B47",150)).to.be.reverted;
+        await expect(teacher.setScore("0x6Ecb1e890b68DFa299DdD4856cf30a3d38867B47",150)).to.be.revertedWithCustomError(score,"SCORE_MAX_100");
+
+        score.connect(user1);
+        await expect(score.setScore("0x6Ecb1e890b68DFa299DdD4856cf30a3d38867B47",90)).to.be.revertedWithCustomError(score,"NOT_TAECHER");
     })
 })
